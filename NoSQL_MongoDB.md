@@ -718,6 +718,11 @@ Add multiple documents in one command
 ```
 db.institute.insertMany([{"course": "Data Engineering"}, {"course": "Data Analysis"}])
 ```
+Older version of insert can insert either One or Many - still works but with a warning:
+```
+db.favourite_films.insert({title:"Film1", genre:"Drama", year:2011})
+DeprecationWarning: Collection.insert() is deprecated. Use insertOne, insertMany, or bulkWrite
+```
 
 ## Validation
 Use JASON Schema validation **$jsonSchema** when creating the collection to validate documents in the collection.
@@ -749,7 +754,7 @@ db.createCollection("Students", {
     }
 })
 ```
-Valid document:
+Valid document
 ```
 db.Students.insertOne({
     name: "Olena",
@@ -778,4 +783,211 @@ MongoDB sends TypeError: Document failed validation
 MongoServerError: Document failed validation
 Details:
 - age must be of type int
+```
+### Note:
+MongoDB Compass mongosh:
+- Enter = Execute command
+- Shift + Enter = New Line /Multiline Script
+
+## Searching for Documents
+
+Search all documents:
+```
+db.Students.find()
+{
+  _id: ObjectId('6a1dc63f82ea08bed3d120ad'),
+  name: 'Sasha',
+  age: '20',
+  course: 'Data Engineering'
+}
+{
+  _id: ObjectId('6a1dc75182ea08bed3d120ae'),
+  name: 'Oscar',
+  age: 20,
+  course: 'Data Science'
+}
+```
+## Update documents
+Update one document:
+```
+db.Students.updateOne(
+  {name:"Oscar"},
+  {$set: {course:"Data Engineering"}}
+)
+```
+Update many will update all documents where the course is "Data Science" to "Data Engineering"
+
+```
+db.Students.updateMany(
+  {course:"Data Science"},
+  {$set:{course:"Data Engineering"}}
+  )
+```
+## Delete documents
+
+Delete One
+```
+db.favourite_films.deleteOne(
+  {title:"Parasite"}
+)
+```
+Delete many documents
+```
+db.favourite_films.deleteMany(
+  {genre:"Sci-Fi"}
+)
+```
+Delete all docs in the collection - empty filter {} matches every document
+```
+db.Students.deleteMany({})
+```
+Delete the entire collection
+```
+db.favourite_films.drop()
+```
+### Enbeddings in MongoDB
+Definition
+
+Embedding means storing related data inside the same document as nested objects or arrays.
+
+Example
+
+Instead of storing a student and their courses in separate collections:
+```
+{
+    _id: 1,
+    name: "Oscar",
+    age: 20,
+    courses: [
+        {
+            course_name: "Data Engineering",
+            grade: 85
+        },
+        {
+            course_name: "Data Science",
+            grade: 90
+        }
+    ]
+}
+```
+Embeddings - visual example
+
+![alt text](Embeddings-2.jpeg)
+
+### Why use Embedding?
+
+Advantages:
+
+- Faster reads because all related data is in one document.
+- No joins required.
+- Simpler queries.
+- Better performance for data that is frequently accessed together.
+
+Good use cases:
+
+- Customer and address
+- Blog post and comments
+- Student and enrolled courses
+- Order and order items
+
+Disadvantages:
+
+- Data duplication may occur.
+- Documents can become very large.
+- Updating duplicated information can be difficult.
+
+### Referencing in MongoDB
+Definition
+
+Referencing means storing related data in separate collections and linking documents using IDs.
+
+Example:
+Student collection:
+```
+{
+    _id: 1,
+    name: "Oscar",
+    age: 20
+}
+```
+Course collection:
+```
+{
+    _id: 101,
+    course_name: "Data Engineering"
+}
+```
+Student-Course collection:
+```
+{
+    student_id: 1,
+    course_id: 101
+}
+```
+Or directly:
+```
+{
+    _id: 1,
+    name: "Oscar",
+    course_ids: [101, 102]
+}
+```
+### Why Use Referencing?
+
+Advantages
+
+- Avoids data duplication.
+- Easier to update related data.
+- Better suited for large datasets.
+- Supports one-to-many and many-to-many relationships.
+- More flexible when data changes frequently.
+
+Good Use Cases
+
+- Students and Courses
+- Users and Roles
+- Products and Suppliers
+- Movies and Actors
+- Customers and Orders
+
+Disadvantages
+
+- More complex queries.
+- May require multiple queries or `$lookup` operations.
+- Slightly slower read performance compared to embedding.
+- Relationships must be managed by the application or query logic.
+```
+Visual example:
+
+        Students
++------------------+
+| _id | name       |
++------------------+
+| 1   | Oscar      |
+| 2   | Anna       |
++------------------+
+          |
+          | student_id
+          ↓
+
++--------------------------+
+| Student_Courses          |
++--------------------------+
+| student_id | course_id   |
++--------------------------+
+| 1          | 101         |
+| 1          | 102         |
+| 2          | 102         |
++--------------------------+
+          ↑
+          | course_id
+          |
+
+        Courses
++--------------------------+
+| _id | course_name        |
++--------------------------+
+|101  | Data Engineering   |
+|102  | Data Science       |
++--------------------------+
 ```
