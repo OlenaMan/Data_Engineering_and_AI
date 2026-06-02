@@ -1,3 +1,25 @@
+"""
+Star Wars Starships Referencing Project
+
+This script demonstrates MongoDB referencing using PyMongo.
+
+Starship data is retrieved from the SWAPI API and transformed before
+being inserted into MongoDB. For each starship, pilot URLs are resolved
+to character documents stored in the existing 'characters' collection.
+The original pilot URLs are replaced with MongoDB ObjectIds, creating
+references between the 'starships' and 'characters' collections.
+
+The transformed starship documents are then inserted into a dedicated
+'starships' collection in the 'starwars' database.
+
+Technologies used:
+- Python
+- Requests
+- PyMongo
+- MongoDB
+- SWAPI (https://swapi.info/)
+"""
+
 import requests
 from pprint import pprint
 from pymongo import MongoClient
