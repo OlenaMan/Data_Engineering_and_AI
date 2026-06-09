@@ -26,6 +26,15 @@ Streaming data
 
 A normal laptop can process small and medium datasets using tools like Pandas. However, if the dataset is too large to fit into RAM, or processing takes too long, tools such as Apache Spark are needed.
 
+```mermaid
+flowchart TD
+    A[Data Sources] --> B{Can one computer process it efficiently?}
+    B -->|Yes| C[Pandas / SQL / Traditional Tools]
+    B -->|No| D[Big Data Tools]
+    D --> E[Apache Spark]
+    E --> F[Distributed Processing]
+    F --> G[Many Machines Working Together]
+```
 
 ---
 
@@ -117,6 +126,13 @@ Example:
 If payment is confirmed, it should still be saved even if the system restarts.
 ```
 
+```mermaid
+flowchart TD
+    A[ACID Transactions] --> B[Atomicity: all or nothing]
+    A --> C[Consistency: valid database state]
+    A --> D[Isolation: transactions do not interfere]
+    A --> E[Durability: committed data is saved]
+```
 
 ---
 
@@ -231,6 +247,15 @@ Challenge:
 
 If badly managed, a Data Lake can become a **Data Swamp**, where data is hard to find, poorly documented, duplicated, or unreliable.
 
+```mermaid
+flowchart TD
+    A[Databases] --> D[Data Lake]
+    B[APIs] --> D
+    C[CSV / JSON / Logs / Images] --> D
+    D --> E[Raw Data Zone]
+    D --> F[Processed Data Zone]
+    D --> G[Analytics / ML / AI]
+```
 
 ---
 
@@ -279,6 +304,17 @@ A Lakehouse reduces this complexity by allowing teams to use one platform for st
 Raw data is stored in cloud storage.
 A reliability layer is added on top.
 Users can query the data using SQL, Spark, BI tools, or ML tools.
+```
+
+```mermaid
+flowchart TD
+    A[Raw Data Sources] --> B[Cloud Storage]
+    B --> C[Lakehouse Reliability Layer]
+    C --> D[Structured Tables]
+    D --> E[SQL Analytics]
+    D --> F[BI Dashboards]
+    D --> G[Machine Learning]
+    D --> H[AI Pipelines]
 ```
 
 ---
@@ -339,7 +375,15 @@ MERGE
 
 Delta Lake can improve query performance through optimisation and metadata handling.
 
-
+```mermaid
+flowchart TD
+    A[Parquet Data Files] --> C[Delta Lake]
+    B[Transaction Log] --> C
+    C --> D[ACID Transactions]
+    C --> E[Schema Enforcement]
+    C --> F[Time Travel]
+    C --> G[Updates / Deletes / Merge]
+```
 
 ---
 
@@ -453,7 +497,18 @@ User Code / Notebook
         ↓
     Data Partitions
 ```
-
+```mermaid
+flowchart TD
+    A[User Code / Notebook] --> B[Driver]
+    B --> C[Execution Plan]
+    C --> D[Tasks]
+    D --> E[Executor 1]
+    D --> F[Executor 2]
+    D --> G[Executor 3]
+    E --> H[Partition 1]
+    F --> I[Partition 2]
+    G --> J[Partition 3]
+```
 
 ---
 
@@ -511,6 +566,14 @@ df = spark.read.csv(
 df.show()
 ```
 
+```mermaid
+flowchart TD
+    A[Python Code] --> B[PySpark API]
+    B --> C[Apache Spark Engine]
+    C --> D[Cluster]
+    D --> E[Executors Process Data]
+    E --> F[Results]
+```
 
 ---
 
@@ -601,6 +664,15 @@ Spark processes the data.
 
 Results can be saved as files, tables, or Delta tables.
 
+```mermaid
+flowchart TD
+    A[Databricks Workspace] --> B[Notebook]
+    B --> C[Attach Cluster]
+    C --> D[Run PySpark / SQL]
+    D --> E[Process Data]
+    E --> F[Save as Table / Delta Table]
+    F --> G[Share / Schedule Job]
+```
 
 ---
 
@@ -747,6 +819,14 @@ Expected output:
 +---+
 ```
 
+```mermaid
+flowchart TD
+    A[Open Databricks Workspace] --> B[Click Workspace]
+    B --> C[Create New Notebook]
+    C --> D[Choose Python]
+    D --> E[Attach Cluster]
+    E --> F[Run Code Cells]
+```
 
 ---
 
@@ -841,6 +921,16 @@ Read the Delta table:
 sales_delta_df = spark.read.table("sales_delta")
 
 sales_delta_df.show()
+```
+
+```mermaid
+flowchart TD
+    A[CSV / JSON / Parquet / Database / API] --> B[Databricks]
+    B --> C[Spark DataFrame]
+    C --> D[Clean / Transform Data]
+    D --> E[Temporary SQL View]
+    D --> F[Delta Table]
+    F --> G[Analytics / BI / ML / AI]
 ```
 
 ---
